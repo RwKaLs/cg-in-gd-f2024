@@ -130,29 +130,29 @@ namespace cg::renderer
 				vertex.y = (-vertex.y + 1.f) * height / 2.f;
 			}
 
-			int2 vertex_a = float2(vertices[0].x, vertices[0].y);
-			int2 vertex_b = float2(vertices[1].x, vertices[1].y);
-			int2 vertex_c = float2(vertices[2].x, vertices[2].y);
+			int2 vertex_a = int2(static_cast<int>(vertices[0].x), static_cast<int>(vertices[0].y));
+			int2 vertex_b = int2(static_cast<int>(vertices[1].x), static_cast<int>(vertices[1].y));
+			int2 vertex_c = int2(static_cast<int>(vertices[2].x), static_cast<int>(vertices[2].y));
 
 			float edge = static_cast<float>(edge_function(vertex_a, vertex_b, vertex_c));
 
-			float2 min_vertex = min(vertex_a, min(vertex_b, vertex_c));
-			float2 bounding_box_begin = round(clamp(
+			int2 min_vertex = min(vertex_a, min(vertex_b, vertex_c));
+			int2 bounding_box_begin = clamp(
 					min_vertex,
-					float2(0, 0),
-					float2{static_cast<float>(width - 1),
-						   static_cast<float>(height - 1)}));
+					int2(0, 0),
+					int2{static_cast<int>(width - 1),
+						   static_cast<int>(height - 1)});
 
-			float2 max_vertex = max(vertex_a, max(vertex_b, vertex_c));
-			float2 bounding_box_end = round(clamp(
+			int2 max_vertex = max(vertex_a, max(vertex_b, vertex_c));
+			int2 bounding_box_end = clamp(
 					max_vertex,
-					float2(0, 0),
-					float2{static_cast<float>(width - 1),
-						   static_cast<float>(height - 1)}));
+					int2(0, 0),
+					int2{static_cast<int>(width - 1),
+						   static_cast<int>(height - 1)});
 
-			for (float x = bounding_box_begin.x; x <= bounding_box_end.x; x+=1.f)
+			for (int x = bounding_box_begin.x; x <= bounding_box_end.x; ++x)
 			{
-				for (float y = bounding_box_begin.y; y <= bounding_box_end.y; y+=1.f)
+				for (int y = bounding_box_begin.y; y <= bounding_box_end.y; ++y)
 				{
 					int2 point(x, y);
 					int edge0 = edge_function(vertex_a, vertex_b, point);
